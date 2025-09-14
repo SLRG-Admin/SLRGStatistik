@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "html2canvas": "^1.4.1",
     "dexie": "^4.2.0",
     "recharts": "^3.2.0",
     "papaparse": "^5.5.3",
-    "dexie-react-hooks": "^4.2.0",
-    "react-dom": "^19.1.1"
+    "dexie-react-hooks": "^4.2.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
