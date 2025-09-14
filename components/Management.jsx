@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '../db';
+import { db } from '../db.js';
 
 // Generic form for adding/editing a person
 const PersonForm = ({ person, onSave, onCancel, entityName }) => {

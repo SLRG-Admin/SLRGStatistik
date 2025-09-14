@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import TrainingOverview from './components/TrainingOverview';
-import Management from './components/Management';
-import Statistics from './components/Statistics';
+import TrainingOverview from './components/TrainingOverview.jsx';
+import Management from './components/Management.jsx';
+import Statistics from './components/Statistics.jsx';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from './db';
+import { db } from './db.js';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('overview');

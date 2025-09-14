@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '../db';
+import { db } from '../db.js';
 
 // Helper component to render a table of trainings
 const TrainingTable = ({ trainings, onSelectTraining, getTrainerName }) => (
