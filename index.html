@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trainingsstatistik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#ef744f',
+              secondary: '#64748b',
+              background: '#1e293b',
+              surface: '#334155',
+              'on-surface': '#cbd5e1',
+              'on-primary': '#ffffff',
+            },
+          },
+        },
+      }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script type="importmap">
+{
+  "imports": {
+    "recharts": "https://aistudiocdn.com/recharts@^3.2.0",
+    "papaparse": "https://aistudiocdn.com/papaparse@^5.5.3",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "dexie": "https://aistudiocdn.com/dexie@^4.2.0",
+    "dexie-react-hooks": "https://aistudiocdn.com/dexie-react-hooks@^4.2.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-background text-on-surface">
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  </body>
+</html>

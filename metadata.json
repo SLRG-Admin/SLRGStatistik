@@ -1,0 +1,5 @@
+{
+  "name": "Trainingsstatistik",
+  "description": "Eine Progressive Web App zur Verfolgung der Anwesenheit von Mitgliedern bei Trainingseinheiten. Die App funktioniert vollständig offline und speichert alle Daten lokal im Browser.",
+  "requestFramePermissions": []
+}
