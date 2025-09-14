@@ -1,119 +1,46 @@
+
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trainingsstatistik</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#ef744f',
-                        secondary: '#64748b',
-                        background: '#1e293b',
-                        surface: '#334155',
-                        'on-surface': '#cbd5e1',
-                    },
-                },
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#0891b2',
+              secondary: '#64748b',
+              background: '#1e293b',
+              surface: '#334155',
+              'on-surface': '#cbd5e1',
+              'on-primary': '#ffffff',
             },
-        };
+          },
+        },
+      }
     </script>
-    <style>
-        body {
-            background-color: #1e293b; /* Tailwind 'background' color */
-        }
-    </style>
-    
-    <script>
-        // Global Error Handler to catch any unhandled exceptions
-        window.onerror = function(message, source, lineno, colno, error) {
-            const root = document.getElementById('root');
-            if (root) {
-                const errorMessage = `
-                    <div style="text-align: center; padding: 20px; font-family: sans-serif; color: #f87171; margin: auto;">
-                        <h1 style="font-size: 1.5rem; margin-bottom: 1rem;">Ein kritischer Fehler ist aufgetreten</h1>
-                        <p>Die App konnte nicht gestartet werden. Dies kann an einem inkompatiblen Browser oder einem Netzwerkproblem liegen.</p>
-                        <div style="background: #334155; border: 1px solid #4b5563; padding: 10px; margin-top: 20px; text-align: left; font-family: monospace; font-size: 0.8em; color: #cbd5e1; word-break: break-all;">
-                            <p style="margin:0 0 5px 0;"><strong>Fehler:</strong> ${message}</p>
-                            <p style="margin:0 0 5px 0;"><strong>Quelle:</strong> ${source ? source.substring(source.lastIndexOf('/') + 1) : 'Unbekannt'}</p>
-                            <p style="margin:0;"><strong>Zeile:</strong> ${lineno || 'N/A'}</p>
-                        </div>
-                    </div>
-                `;
-                root.innerHTML = errorMessage;
-            }
-            // Prevent the default browser error handling
-            return true;
-        };
-    </script>
-    
-    <!-- 1. Configure the hook for es-module-shims BEFORE loading the shim -->
-    <script>
-      window.esmsInitOptions = {
-        // Enable shimming of all module features
-        shimMode: true,
-        // Define a custom fetch hook to transpile JSX/JS modules with Babel
-        fetch: async (url, options) => {
-          const response = await fetch(url, options);
-          if (!response.ok) return response;
-
-          // Only transpile local JSX files
-          const isLocalScript = url.startsWith(window.location.origin) && url.endsWith('.jsx');
-
-          if (isLocalScript) {
-            const source = await response.text();
-            try {
-              // Transpile the source code using Babel
-              const transformed = Babel.transform(source, {
-                presets: ['react'],
-                filename: url // for better error messages
-              }).code;
-              // Return the transformed code as a new response
-              return new Response(new Blob([transformed], { type: 'application/javascript' }));
-            } catch (error) {
-              console.error('Babel transformation error:', error);
-              // If babel fails, return original response so browser can show the syntax error
-              return response;
-            }
-          }
-          // For all other files (libraries, css, etc.), return the original response
-          return response;
-        }
-      };
-    </script>
-    
-    <!-- 2. Load ES Module Shims and Babel -->
-    <script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- 3. The importmap is now correctly used by the shim -->
-    <script type="importmap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@19.0.0-rc-f994737d14-20240522",
-    "react/jsx-runtime": "https://esm.sh/react@19.0.0-rc-f994737d14-20240522/jsx-runtime",
-    "react-dom": "https://esm.sh/react-dom@19.0.0-rc-f994737d14-20240522",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0-rc-f994737d14-20240522/client",
-    "html2canvas": "https://esm.sh/html2canvas@1.4.1",
-    "dexie": "https://esm.sh/dexie@4.0.7",
-    "recharts": "https://esm.sh/recharts@2.12.7",
-    "papaparse": "https://esm.sh/papaparse@5.4.1",
-    "dexie-react-hooks": "https://esm.sh/dexie-react-hooks@1.1.7",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/"
+    "recharts": "https://aistudiocdn.com/recharts@^3.2.0",
+    "papaparse": "https://aistudiocdn.com/papaparse@^5.5.3",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "dexie": "https://aistudiocdn.com/dexie@^4.2.0",
+    "dexie-react-hooks": "https://aistudiocdn.com/dexie-react-hooks@^4.2.0"
   }
 }
 </script>
 </head>
-<body>
-    <div id="root">
-        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; color: #cbd5e1;">
-            Wird geladen...
-        </div>
-    </div>
-    <!-- 4. Load the entry point as a standard module. The shim will intercept and transpile it. -->
-    <script type="module" src="./index.jsx"></script>
-</body>
+  <body class="bg-background text-on-surface">
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  </body>
 </html>
