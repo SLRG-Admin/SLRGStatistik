@@ -10,15 +10,14 @@ export class TrainingDB extends Dexie {
 
   constructor() {
     super('TrainingDB');
-    this.version(2).stores({
+    // Version 3 ist die neueste Version und muss die Definition aller Tabellen enthalten.
+    // Dexie erfordert, dass jede neue Version die Schemata aller bestehenden Tabellen wiederholt.
+    this.version(3).stores({
       members: '++id, external_id, nachname, vorname',
       trainers: '++id, external_id, nachname, vorname',
-      trainings: '++id, external_id, datum, thema, trainer1_id, trainer2_id',
+      trainings: '++id, external_id, datum, thema, trainer1_id, trainer2_id, completed', // Das Feld 'completed' wurde in dieser Version hinzugefügt.
       attendances: '[training_id+member_id], training_id, member_id',
-      settings: 'key',
-    });
-    this.version(3).stores({
-        trainings: '++id, external_id, datum, thema, trainer1_id, trainer2_id, completed',
+      settings: 'key', // Diese Tabelle wurde in einer früheren Version eingeführt, muss aber hier erneut deklariert werden.
     });
   }
 }
