@@ -30,19 +30,22 @@
     <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.1.1/",
-    "react": "https://aistudiocdn.com/react@^19.1.1",
-    "react-dom": "https://aistudiocdn.com/react-dom@^19.1.1",
-    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.1.1/client",
-    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
-    "dexie": "https://aistudiocdn.com/dexie@^4.2.0",
-    "recharts": "https://aistudiocdn.com/recharts@^3.2.0",
-    "papaparse": "https://aistudiocdn.com/papaparse@^5.5.3",
-    "dexie-react-hooks": "https://aistudiocdn.com/dexie-react-hooks@^4.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/"
+    "react": "https://esm.sh/react@19.0.0-rc-f994737d14-20240522",
+    "react/jsx-runtime": "https://esm.sh/react@19.0.0-rc-f994737d14-20240522/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@19.0.0-rc-f994737d14-20240522",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0-rc-f994737d14-20240522/client",
+    "html2canvas": "https://esm.sh/html2canvas@1.4.1",
+    "dexie": "https://esm.sh/dexie@4.0.7",
+    "recharts": "https://esm.sh/recharts@2.12.7",
+    "papaparse": "https://esm.sh/papaparse@5.4.1",
+    "dexie-react-hooks": "https://esm.sh/dexie-react-hooks@1.1.7",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/"
   }
 }
 </script>
+    <!-- Babel Standalone for in-browser transpilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
     <div id="root">
@@ -50,6 +53,7 @@
             Wird geladen...
         </div>
     </div>
-    <script type="module" src="./index.tsx"></script>
+    <!-- The script type is changed to "text/babel" to be processed by Babel -->
+    <script type="text/babel" data-type="module" src="./index.tsx"></script>
 </body>
 </html>
