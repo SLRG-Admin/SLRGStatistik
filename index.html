@@ -62,13 +62,10 @@
     "recharts": "https://esm.sh/recharts@2.12.7",
     "papaparse": "https://esm.sh/papaparse@5.4.1",
     "dexie-react-hooks": "https://esm.sh/dexie-react-hooks@1.1.7",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
-    "react/": "https://aistudiocdn.com/react@^19.1.1/"
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/"
   }
 }
 </script>
-    <!-- Babel Standalone for in-browser transpilation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
     <div id="root">
@@ -76,7 +73,6 @@
             Wird geladen...
         </div>
     </div>
-    <!-- The script type is changed to "text/babel" to be processed by Babel -->
-    <script type="text/babel" data-type="module" src="./index.tsx"></script>
+    <script type="module" src="./index.jsx"></script>
 </body>
 </html>
