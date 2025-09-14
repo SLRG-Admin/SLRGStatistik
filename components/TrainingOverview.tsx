@@ -49,17 +49,21 @@ const TrainingOverview: React.FC = () => {
     const allTrainers = useLiveQuery(() => db.trainers.toArray(), []);
 
     const trainingData = useLiveQuery(async () => {
-        let collection = db.trainings.orderBy('datum').reverse();
-        
-        const trainingsArray = await collection.toArray();
-
-        let filtered = trainingsArray;
+        // We fetch all trainings and sort them in JS, because Dexie's orderBy
+        // would sort the 'DD.MM.YYYY' date string lexicographically, which is incorrect.
+        const trainingsArray = await db.trainings.toArray();
         
         const parseDate = (dateStr: string) => {
             const [day, month, year] = dateStr.split('.').map(Number);
             return new Date(year, month - 1, day);
         };
+        
+        // Sort by date ascending (oldest first)
+        trainingsArray.sort((a, b) => parseDate(a.datum).getTime() - parseDate(b.datum).getTime());
 
+
+        let filtered = trainingsArray;
+        
         if (filterDateFrom) {
             const from = parseDate(filterDateFrom.split('-').reverse().join('.'));
             filtered = filtered.filter(t => parseDate(t.datum) >= from);

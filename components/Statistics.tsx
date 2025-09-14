@@ -10,9 +10,10 @@ import type { Member } from '../types';
 const Statistics: React.FC = () => {
     const today = new Date();
     const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+    const lastDayOfYear = new Date(today.getFullYear(), 11, 31);
     
     const [dateFrom, setDateFrom] = useState(firstDayOfYear.toISOString().split('T')[0]);
-    const [dateTo, setDateTo] = useState(today.toISOString().split('T')[0]);
+    const [dateTo, setDateTo] = useState(lastDayOfYear.toISOString().split('T')[0]);
 
     const allTrainers = useLiveQuery(() => db.trainers.toArray(), []);
     const allMembers = useLiveQuery(() => db.members.toArray(), []);
@@ -143,7 +144,7 @@ const Statistics: React.FC = () => {
         return <i className={`fa-solid fa-trophy ${colors[rank]} w-6 text-center`}></i>;
     };
     
-    const COLORS = ['#0891b2', '#0e7490', '#155e75', '#164e63', '#083344'];
+    const COLORS = ['#ef744f', '#d76947', '#bf5e3f', '#a75337', '#8f482f'];
 
     return (
         <div className="space-y-6">
@@ -185,7 +186,7 @@ const Statistics: React.FC = () => {
                             <XAxis type="number" stroke="#cbd5e1"/>
                             <YAxis type="category" dataKey="name" stroke="#cbd5e1" width={100} tick={{fontSize: 12}}/>
                             <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569' }}/>
-                            <Bar dataKey="value" fill="#0891b2" name="Anzahl"/>
+                            <Bar dataKey="value" fill="#ef744f" name="Anzahl"/>
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

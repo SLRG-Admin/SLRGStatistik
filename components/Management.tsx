@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
@@ -251,18 +250,73 @@ const CsvImport = () => {
     const handleFileUpload = <T,>(file: File, processor: (data: any[]) => Promise<string[]>) => {
         if (!file) return;
         setReport(['Verarbeite...']);
+
         Papa.parse(file, {
-            header: true,
             skipEmptyLines: true,
+            header: false, // We read header manually to normalize it
+            delimitersToGuess: [',', ';'],
             complete: async (results) => {
-                const importReport = await processor(results.data);
-                setReport(importReport);
+                if (results.errors.length > 0) {
+                    // We manually handle field count mismatch, so filter those errors out.
+                    const criticalErrors = results.errors.filter(e => e.code !== 'TooManyFields' && e.code !== 'TooFewFields');
+                    if (criticalErrors.length > 0) {
+                        const errorMessages = criticalErrors.map(e => `Zeile ${e.row + 1}: ${e.message}`).join('; ');
+                        setReport([`Kritischer Fehler beim Parsen der Datei. Details: ${errorMessages}`]);
+                        return;
+                    }
+                }
+                
+                const data = results.data as string[][];
+                if (data.length < 2) {
+                    setReport(['Die Datei muss eine Kopfzeile und mindestens eine Datenzeile enthalten.']);
+                    return;
+                }
+
+                const headerRow = data[0].map(h => h.trim().replace(/"/g, ''));
+                const dataRows = data.slice(1);
+                
+                const warnings: string[] = [];
+                const processedData: any[] = [];
+
+                dataRows.forEach((row, index) => {
+                    if (row.every(field => field.trim() === '')) {
+                        return; // Skip empty/blank rows
+                    }
+
+                    let finalRow = row;
+                    if (row.length !== headerRow.length) {
+                        warnings.push(`Warnung Zeile ${index + 2}: Spaltenanzahl stimmt nicht überein (erwartet: ${headerRow.length}, gefunden: ${row.length}). Zeile wurde automatisch korrigiert.`);
+                        if (row.length > headerRow.length) {
+                            finalRow = row.slice(0, headerRow.length);
+                        } else {
+                            finalRow = [...row];
+                            while (finalRow.length < headerRow.length) {
+                                finalRow.push('');
+                            }
+                        }
+                    }
+
+                    const obj: { [key: string]: string } = {};
+                    headerRow.forEach((header, i) => {
+                        obj[header] = finalRow[i];
+                    });
+                    processedData.push(obj);
+                });
+
+                if (processedData.length === 0) {
+                    setReport(['Keine gültigen Datenzeilen zum Importieren gefunden.']);
+                    return;
+                }
+
+                const importReport = await processor(processedData);
+                setReport([...warnings, ...importReport]);
             },
-            error: (err: any) => {
-                setReport([`Fehler beim Parsen der Datei: ${err.message}`]);
+            error: (err: Error) => {
+                setReport([`Ein kritischer Fehler ist beim Parsen aufgetreten: ${err.message}`]);
             }
         });
     };
+
 
     const processMembers = async (data: any[]): Promise<string[]> => {
         let imported = 0, skipped = 0;
@@ -381,10 +435,34 @@ const CsvImport = () => {
     return (
         <div className="bg-surface p-4 rounded-lg shadow-lg space-y-6">
             <h2 className="text-xl font-bold text-white">CSV-Daten importieren</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <FileInput label="Mitglieder (mitglieder.csv)" onFileSelect={(file) => handleFileUpload(file, processMembers)} />
-                <FileInput label="Trainer (trainer.csv)" onFileSelect={(file) => handleFileUpload(file, processTrainers)} />
-                <FileInput label="Trainings (trainings.csv)" onFileSelect={(file) => handleFileUpload(file, processTrainings)} />
+            <div className="text-on-surface/90 text-sm space-y-2">
+                <p>
+                    Laden Sie Ihre Daten als CSV-Datei hoch. Die erste Zeile jeder Datei muss die Spaltenüberschriften (Header) enthalten.
+                    Die Zuordnung der Daten erfolgt über die Spaltennamen.
+                </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="flex flex-col space-y-2">
+                    <FileInput label="Mitglieder (mitglieder.csv)" onFileSelect={(file) => handleFileUpload(file, processMembers)} />
+                    <p className="text-xs text-on-surface/80 mt-1">
+                        Format: <code className="bg-background px-1 rounded">ID</code>, <code className="bg-background px-1 rounded">Vorname</code>, <code className="bg-background px-1 rounded">Nachname</code>
+                    </p>
+                </div>
+                <div className="flex flex-col space-y-2">
+                    <FileInput label="Trainer (trainer.csv)" onFileSelect={(file) => handleFileUpload(file, processTrainers)} />
+                     <p className="text-xs text-on-surface/80 mt-1">
+                        Format: <code className="bg-background px-1 rounded">ID</code>, <code className="bg-background px-1 rounded">Vorname</code>, <code className="bg-background px-1 rounded">Nachname</code>
+                    </p>
+                </div>
+                <div className="flex flex-col space-y-2">
+                    <FileInput label="Trainings (trainings.csv)" onFileSelect={(file) => handleFileUpload(file, processTrainings)} />
+                    <p className="text-xs text-on-surface/80 mt-1">
+                        Format: <code className="bg-background px-1 rounded">ID</code>, <code className="bg-background px-1 rounded">Datum</code>, <code className="bg-background px-1 rounded">Thema</code>, <code className="bg-background px-1 rounded">Trainer1</code>, <code className="bg-background px-1 rounded">Trainer2</code>
+                    </p>
+                    <p className="text-xs text-on-surface/80 mt-1">
+                        (Trainer1/2 müssen die <code className="bg-background px-1 rounded">ID</code> aus der Trainer-Datei sein)
+                    </p>
+                </div>
             </div>
             {report.length > 0 && (
                  <div className="mt-6 bg-background p-4 rounded-md">
