@@ -27,6 +27,29 @@
         }
     </style>
     
+    <script>
+        // Global Error Handler to catch any unhandled exceptions
+        window.onerror = function(message, source, lineno, colno, error) {
+            const root = document.getElementById('root');
+            if (root) {
+                const errorMessage = `
+                    <div style="text-align: center; padding: 20px; font-family: sans-serif; color: #f87171; margin: auto;">
+                        <h1 style="font-size: 1.5rem; margin-bottom: 1rem;">Ein kritischer Fehler ist aufgetreten</h1>
+                        <p>Die App konnte nicht gestartet werden. Dies kann an einem inkompatiblen Browser oder einem Netzwerkproblem liegen.</p>
+                        <div style="background: #334155; border: 1px solid #4b5563; padding: 10px; margin-top: 20px; text-align: left; font-family: monospace; font-size: 0.8em; color: #cbd5e1; word-break: break-all;">
+                            <p style="margin:0 0 5px 0;"><strong>Fehler:</strong> ${message}</p>
+                            <p style="margin:0 0 5px 0;"><strong>Quelle:</strong> ${source ? source.substring(source.lastIndexOf('/') + 1) : 'Unbekannt'}</p>
+                            <p style="margin:0;"><strong>Zeile:</strong> ${lineno || 'N/A'}</p>
+                        </div>
+                    </div>
+                `;
+                root.innerHTML = errorMessage;
+            }
+            // Prevent the default browser error handling
+            return true;
+        };
+    </script>
+    
     <script type="importmap">
 {
   "imports": {
