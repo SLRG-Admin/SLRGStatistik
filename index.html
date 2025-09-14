@@ -1,49 +1,54 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trainingsstatistik</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: '#ef744f',
-              secondary: '#64748b',
-              background: '#1e293b',
-              surface: '#334155',
-              'on-surface': '#cbd5e1',
-              'on-primary': '#ffffff',
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ef744f',
+                        secondary: '#64748b',
+                        background: '#1e293b',
+                        surface: '#334155',
+                        'on-surface': '#cbd5e1',
+                    },
+                },
             },
-          },
-        },
-      }
+        };
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script type="importmap">
+    <style>
+        body {
+            background-color: #1e293b; /* Tailwind 'background' color */
+        }
+    </style>
+    
+    <script type="importmap">
 {
   "imports": {
-    "recharts": "https://aistudiocdn.com/recharts@^3.2.0",
-    "papaparse": "https://aistudiocdn.com/papaparse@^5.5.3",
     "react/": "https://aistudiocdn.com/react@^19.1.1/",
     "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.1.1/client",
     "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
     "dexie": "https://aistudiocdn.com/dexie@^4.2.0",
-    "dexie-react-hooks": "https://aistudiocdn.com/dexie-react-hooks@^4.2.0"
+    "recharts": "https://aistudiocdn.com/recharts@^3.2.0",
+    "papaparse": "https://aistudiocdn.com/papaparse@^5.5.3",
+    "dexie-react-hooks": "https://aistudiocdn.com/dexie-react-hooks@^4.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/"
   }
 }
 </script>
 </head>
-  <body class="bg-background text-on-surface">
+<body>
     <div id="root">
-      <div style="text-align: center; padding-top: 50px; font-family: sans-serif; color: #cbd5e1;">
-        <h1>App wird geladen...</h1>
-        <p>Wenn die App nicht geladen wird, stellen Sie sicher, dass JavaScript aktiviert ist und Ihr Browser auf dem neuesten Stand ist.</p>
-      </div>
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; color: #cbd5e1;">
+            Wird geladen...
+        </div>
     </div>
     <script type="module" src="./index.tsx"></script>
-  </body>
+</body>
 </html>
