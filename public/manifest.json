@@ -2,7 +2,7 @@
   "name": "SLRG Trainingsstatistik",
   "short_name": "SLRG Statistik",
   "description": "Erfasst Trainingsstatistiken der Rettungsschwimmer und zeigt Auswertungen an.",
-  "start_url": "./index.html",
+  "start_url": "/SLRGStatistik/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#104e9f",
@@ -11,22 +11,22 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "./android-launchericon-96-96.png",
+      "src": "/SLRGStatistik/android-launchericon-96-96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "./android-launchericon-144-144.png",
+      "src": "/SLRGStatistik/android-launchericon-144-144.png",
       "sizes": "144x144",
       "type": "image/png"
     },
     {
-      "src": "./android-launchericon-192-192.png",
+      "src": "/SLRGStatistik/android-launchericon-192-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "./android-launchericon-512-512.png",
+      "src": "/SLRGStatistik/android-launchericon-512-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -37,13 +37,13 @@
       "name": "Statistik öffnen",
       "short_name": "Statistik",
       "description": "Direkt zur Statistikübersicht springen",
-      "url": "./statistik"
+      "url": "/SLRGStatistik/statistik"
     },
     {
       "name": "Trainingübersicht",
       "short_name": "Training",
       "description": "Zu den Trainingsdaten wechseln",
-      "url": "./training"
+      "url": "/SLRGStatistik/training"
     }
   ]
 }
