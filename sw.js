@@ -1,8 +1,8 @@
-// 🔹 SLRG Statistik – Service Worker für Offline-Funktionalität
-const CACHE_NAME = "slrg-statistik-v1";
+// 🔹 SLRG Statistik – Service Worker mit Offline-Unterstützung
+const CACHE_NAME = "slrg-statistik-v2";
 const OFFLINE_URL = "offline.html";
 
-// Liste der Dateien, die direkt beim Installieren gecacht werden
+// Dateien, die direkt gecacht werden sollen
 const ASSETS_TO_CACHE = [
   "index.html",
   "manifest.json",
@@ -13,22 +13,20 @@ const ASSETS_TO_CACHE = [
   "android-launchericon-512-512.png"
 ];
 
-// 🧱 Installation – Cache vorbereiten
+// 🧱 Installation – Cache aufbauen
 self.addEventListener("install", (event) => {
-  console.log("🔧 Service Worker wird installiert...");
+  console.log("📦 Installiere Service Worker und cache Dateien...");
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log("📦 Dateien werden gecacht...");
-        return cache.addAll(ASSETS_TO_CACHE);
-      })
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
   );
   self.skipWaiting();
 });
 
-// 🧹 Alte Caches entfernen, wenn Version geändert wird
+// ♻️ Alte Caches löschen
 self.addEventListener("activate", (event) => {
-  console.log("♻️ Alte Caches werden entfernt...");
+  console.log("♻️ Aktiviert und alte Caches entfernt...");
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
@@ -41,22 +39,23 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// ⚡ Netzwerkanfragen abfangen
+// ⚡ Fetch-Handler mit Offline-Fallback
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Antwort erfolgreich → zwischenspeichern
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        // Antwort im Cache speichern
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
         return response;
       })
       .catch(() => {
-        // Kein Netz → versuche Cache
-        return caches.match(event.request)
-          .then((cached) => cached || caches.match(OFFLINE_URL));
+        // Wenn offline → versuche Cache → sonst offline.html
+        return caches.match(event.request).then((cached) => {
+          return cached || caches.match(OFFLINE_URL);
+        });
       })
   );
 });
