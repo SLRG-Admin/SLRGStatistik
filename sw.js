@@ -1,8 +1,8 @@
-// 🔹 SLRG Statistik – Service Worker mit Offline-Unterstützung
-const CACHE_NAME = "slrg-statistik-v2";
+// 🔹 SLRG Statistik – PWA Builder kompatibler Service Worker mit Offline-Unterstützung
+const CACHE_NAME = "slrg-statistik-v3";
 const OFFLINE_URL = "offline.html";
 
-// Dateien, die direkt gecacht werden sollen
+// Dateien, die beim Installieren gecacht werden
 const ASSETS_TO_CACHE = [
   "index.html",
   "manifest.json",
@@ -13,49 +13,48 @@ const ASSETS_TO_CACHE = [
   "android-launchericon-512-512.png"
 ];
 
-// 🧱 Installation – Cache aufbauen
+// 🧱 Installation
 self.addEventListener("install", (event) => {
-  console.log("📦 Installiere Service Worker und cache Dateien...");
+  console.log("📦 Installing Service Worker...");
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
   );
   self.skipWaiting();
 });
 
-// ♻️ Alte Caches löschen
+// ♻️ Aktivieren und alte Caches löschen
 self.addEventListener("activate", (event) => {
-  console.log("♻️ Aktiviert und alte Caches entfernt...");
+  console.log("♻️ Aktivieren & alte Caches entfernen...");
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      );
-    })
+    caches.keys().then((keys) =>
+      Promise.all(keys.map((key) => key !== CACHE_NAME && caches.delete(key)))
+    )
   );
   self.clients.claim();
 });
 
-// ⚡ Fetch-Handler mit Offline-Fallback
+// ⚡ Fetch-Event – Offline-Fallback
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Antwort im Cache speichern
-        const responseClone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+        // Im Cache speichern
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         return response;
       })
-      .catch(() => {
-        // Wenn offline → versuche Cache → sonst offline.html
-        return caches.match(event.request).then((cached) => {
-          return cached || caches.match(OFFLINE_URL);
-        });
+      .catch(async () => {
+        // Versuche Cache oder offline.html
+        const cache = await caches.open(CACHE_NAME);
+        const cachedResponse = await cache.match(event.request);
+        if (cachedResponse) {
+          return cachedResponse;
+        } else {
+          console.warn("⚠️ Offline – zeige Offline-Seite");
+          return cache.match(OFFLINE_URL);
+        }
       })
   );
 });
