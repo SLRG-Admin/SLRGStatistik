@@ -41,5 +41,14 @@
 </head>
   <body class="bg-background text-on-surface">
     <div id="root"></div>
+    <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/SLRGStatistik/sw.js")
+        .then(() => console.log("✅ Service Worker registriert"))
+        .catch((err) => console.error("❌ Service Worker Fehler:", err));
+    });
+  }
+</script>
   </body>
 </html>
